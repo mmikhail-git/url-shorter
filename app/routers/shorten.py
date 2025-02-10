@@ -26,7 +26,7 @@ async def create_link(original_link: RequestLinkCreate, db: AsyncSession = Depen
                       current_user: Optional[ResponseUser] = Depends(get_current_user)):
     while True:  # Цикл для попытки создания новой ссылки
         try:
-            async with db.begin():  # Начало транзакции
+            async with db.begin():
                 short_link = generate_short_link()  # Генерация короткой ссылки
                 link = Link(
                     short_link=short_link,
@@ -36,17 +36,16 @@ async def create_link(original_link: RequestLinkCreate, db: AsyncSession = Depen
                 )
 
                 db.add(link)
-                await db.flush()  # Необходимо для получения ID сгенерированной записи
+                await db.flush()
 
                 analytics = Analytics(
                     link_id=link.id
                 )
                 db.add(analytics)
 
-            break  # Если все прошло успешно, выходим из цикла
-        except IntegrityError:  # Если произошла ошибка уникальности
-            await db.rollback()  # Откат транзакции
-            # Генерируем короткую ссылку заново и повторяем попытку
+            break
+        except IntegrityError:
+            await db.rollback()
 
     return {
         'link': link,

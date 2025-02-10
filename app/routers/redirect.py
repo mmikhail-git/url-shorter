@@ -26,18 +26,13 @@ async def get_all(get_user: Annotated[dict, Depends(get_current_user)],
     if get_user == None:
         return []
 
-    # Предположим, что у нас есть модели Link и Analytics
     result = await db.execute(
         select(Link, Analytics)
         .join(Analytics, Link.id == Analytics.link_id, isouter=True)  # LEFT OUTER JOIN
         .where(Link.username == get_user['id'])
     )
 
-    # Получаем результаты
     links_with_analytics = result.all()
-
-    for link, analytics in links_with_analytics:
-        print(link.short_link, analytics.total_clicks if analytics else "No analytics")
 
     return [
         {
