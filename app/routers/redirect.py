@@ -1,7 +1,6 @@
 import random
 import string
 from typing import Optional, Annotated
-
 from fastapi import Depends, FastAPI, APIRouter, HTTPException
 from sqlalchemy import func, select, and_, or_
 from sqlalchemy.exc import IntegrityError
@@ -9,9 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 from starlette.requests import Request
 from starlette.responses import RedirectResponse
-
 from app.db.models import Link, Analytics, Click
-
 from app.db.session import get_db
 from app.routers.auth import get_current_user
 from app.schemas.schemas import ResponseUser, RequestLinkCreate
@@ -54,7 +51,10 @@ async def get_full_link(short_link: str, db: AsyncSession = Depends(get_db)) -> 
             and_(
                 Link.is_active == True,
                 Link.short_link == short_link,
-                Link.expires_at > func.now()
+                or_(
+                    Link.expires_at > func.now(),
+                    Link.expires_at == None
+                )
             )
         )
     )

@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8000'; // Замените на ваш URL бэкенда
+const API_BASE_URL = 'http://localhost/api';
 
 // Функция для создания короткой ссылки
 const createShortLink = async (fullLink, expiresAt, isAuthenticated) => {
@@ -7,7 +7,7 @@ const createShortLink = async (fullLink, expiresAt, isAuthenticated) => {
       'Content-Type': 'application/json',
     };
 
-    // Добавляем токен, если пользователь авторизован
+    // Добавляем токен, только если пользователь авторизован
     if (isAuthenticated) {
       headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
     }
@@ -48,11 +48,14 @@ document.getElementById('link-form')?.addEventListener('submit', async (e) => {
     const shortLink = await createShortLink(fullLink, expiresAt, isAuthenticated);
     const resultElement = document.getElementById('short-link-result');
     resultElement.style.display = 'block';
-    resultElement.innerText = `Короткая ссылка: ${shortLink}`;
+    resultElement.innerHTML = `Короткая ссылка: <a href="${API_BASE_URL}/redirect/${shortLink}" target="_blank">${shortLink}</a>`;
+
   } catch (error) {
     alert('Не удалось создать короткую ссылку: ' + error.message);
   }
 });
+
+
 
 // Функция для авторизации
 document.getElementById('login-form')?.addEventListener('submit', async (e) => {

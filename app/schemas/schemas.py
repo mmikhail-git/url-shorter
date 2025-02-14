@@ -11,7 +11,7 @@ class RequestLinkCreate(BaseModel):
         json_schema_extra = {
             "example": {
                 "full_link": "https://example.com",
-                "expires_at": "2025-02-09T13:19:21"
+                "expires_at": "2030-02-09T13:19:21"
             }
         }
 

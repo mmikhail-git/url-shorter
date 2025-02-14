@@ -1,15 +1,14 @@
 import datetime
+import os
 from sqlalchemy import TIMESTAMP, func
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker, DeclarativeBase, Mapped, mapped_column
+from app.config import settings
 
-# Use `asyncpg` as the driver for PostgreSQL
-engine = create_async_engine(
-    'postgresql+asyncpg://postgres:mysecretpassword@localhost:5432/shortener',
-    echo=False
-)
+DATABASE_URL = settings.get_db_url()
 
-# Create an async sessionmaker
+engine = create_async_engine(DATABASE_URL)
+
 AsyncSessionLocal = sessionmaker(
     bind=engine,
     class_=AsyncSession,

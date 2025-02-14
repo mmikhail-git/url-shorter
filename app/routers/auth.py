@@ -3,7 +3,6 @@ from sqlalchemy import select, insert
 from typing import Annotated, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 from passlib.context import CryptContext
-
 from app.db.models import User
 from app.schemas.schemas import RequestUserCreate, ResponseUser
 from app.db.session import get_db
@@ -11,7 +10,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from datetime import datetime, timedelta, timezone
 from jose import jwt, JWTError, ExpiredSignatureError
 
-SECRET_KEY = '76cf9af5c7ce008b1959755a37b2e795c96a77ab543064610d395244c54a8c10'
+SECRET_KEY = '76cf9af5c7ce008b1959755a37b2e795c96a77ab543064610d395244c54a8c10' #спрятать в ENVs
 ALGORITHM = 'HS256'
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token", auto_error=False)
@@ -35,35 +34,6 @@ async def create_user(create_user_request: RequestUserCreate, db: AsyncSession =
         'transaction': 'Successful'
     }
 
-
-# async def get_current_user(token: Optional[str] = Depends(get_optional_token)) -> Optional[ResponseUser]:
-#     if token is None:
-#         print('Token is absent')
-#         return None  # Если токен отсутствует, возвращаем None
-#
-#     try:
-#         # Декодируем токен
-#         user = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-#         username_jwt: str = user.get('sub')
-#         user_id_jwt: int = user.get('id')
-#         expire = user.get('exp')
-#         print('=', user)
-#         # Проверяем, истек ли срок действия токена
-#         if expire is not None and datetime.utcnow() > datetime.fromtimestamp(expire):
-#             print(1234)
-#             return None  # Если токен истек, возвращаем None
-#
-#         if username_jwt is None or user_id_jwt is None:
-#             print(1234)
-#             return None  # Если данные пользователя отсутствуют, возвращаем None
-#
-#         print(username_jwt, user_id_jwt, expire)
-#
-#         return ResponseUser(username=username_jwt, id=user_id_jwt)
-#
-#     except JWTError:
-#         print('JWTError')
-#         return None  # Если токен невалиден, возвращаем None
 
 async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     if token is None:

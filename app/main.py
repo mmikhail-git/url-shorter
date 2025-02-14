@@ -2,9 +2,12 @@ from fastapi import FastAPI
 from app.routers import shorten, auth, redirect, control
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI()
+app = FastAPI(root_path="/api")
 
-# Настройка CORS
+@app.get("/endpoint")
+async def read_endpoint():
+    return {"message": "Hello, World!"}
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

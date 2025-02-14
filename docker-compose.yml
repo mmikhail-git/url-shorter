@@ -1,14 +1,19 @@
 services:
   web:
-    # Берем Dockerfile из каталога app
     build:
       context: .
       dockerfile: ./app/Dockerfile
-    # Запускаем тестовый сервер
+    container_name: app1-backend
+    restart: always
+    environment:
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
     command: uvicorn app.main:app --host 0.0.0.0
-    # Открываем порт 8000 внутри и снаружи
-    ports:
-      - 8000:8000
+    networks:
+      - app1-network
     depends_on:
       - db
 
@@ -17,19 +22,29 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=postgres_user
-      - POSTGRES_PASSWORD=postgres_password
-      - POSTGRES_DB=postgres_database
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    networks:
+      - app1-network
 
   frontend:
     image: nginx:latest
+    container_name: app1-frontend
+    restart: always
     volumes:
       - ./app/static:/usr/share/nginx/html
     ports:
-      - 80:81
+      - 8081:80
+    networks:
+      - app1-network
     depends_on:
       - web
 
 volumes:
   postgres_data:
     driver: local
+
+networks:
+  app1-network:
+    external: true

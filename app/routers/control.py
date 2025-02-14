@@ -1,13 +1,9 @@
 from typing import Annotated
-
 from fastapi import Depends, FastAPI, APIRouter, HTTPException
 from sqlalchemy import func, select, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
-
-
 from app.db.models import Link
-
 from app.db.session import get_db
 from app.routers.auth import get_current_user
 

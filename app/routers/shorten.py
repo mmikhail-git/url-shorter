@@ -1,14 +1,12 @@
 import random
 import string
 from typing import Optional
-
 from fastapi import Depends, FastAPI, APIRouter
 from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 from app.db.models import Link, Analytics
-
 from app.db.session import get_db
 from app.routers.auth import get_current_user
 from app.schemas.schemas import ResponseUser, RequestLinkCreate
