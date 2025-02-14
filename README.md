@@ -47,4 +47,4 @@
   - Выполните миграции БД
     - docker compose -f docker-compose.yml exec web alembic upgrade head
 
- Демо проекта доступно по ссылке - http://url-shorter/forb1.tech/index.html (user/123)
+ Демо проекта доступно по ссылке - http://short.forb1.tech/ (user/123)
