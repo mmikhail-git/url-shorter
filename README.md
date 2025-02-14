@@ -40,11 +40,11 @@
   - Клонируйте репозиторий:
     - git clone <repository>
   - Перейдите в папку проекта
-    - cd shorterLink  
+    - cd shorterLink
+  - Укажите желаемые параметры для подключения к PostgreSQL в файле .env (для запуска проекта из docker-compose могут быть любыми)
   - Запустите проект с помощью Docker Compose:
     - docker compose up --build
   - Выполните миграции БД
     - docker compose -f docker-compose.yml exec web alembic upgrade head
 
-
- Демо проекта доступно по ссылке - http://url-shorter/forb1.tech/index.html 
+ Демо проекта доступно по ссылке - http://url-shorter/forb1.tech/index.html (user/123)
